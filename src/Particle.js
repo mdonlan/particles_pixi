@@ -1,5 +1,5 @@
 export default class Particle {
-    constructor(app, speedMod, id, texture) {
+    constructor(app, speedMod, id, texture, particles) {
         this.app = app;
         this.speedMod = speedMod;
         this.id = id;
@@ -17,19 +17,21 @@ export default class Particle {
 
         this.sprite.x = Math.floor(Math.random() * window.innerWidth) + 1;
         this.sprite.y = Math.floor(Math.random() * window.innerHeight) + 1;
+
+
+
+
+        const color = particles.create_color_gradient(15, 15, true);
+        const _texture = color.generateCanvasTexture();
+        this.sprite.texture = _texture;
     }
 
-    makeRandomColor(){
-        var c = '';
-        while (c.length < 7) {
-            c += (Math.random()).toString(16).substr(-6).substr(-1)
-        }
-        return '0x'+c;
-    }
-
-    update () {
+    
+      
+    update (color) {
         this.sprite.x += this.velX;
         this.sprite.y += this.velY;
+        // this.sprite.tint = color;
         this.checkBounds();
     }
 

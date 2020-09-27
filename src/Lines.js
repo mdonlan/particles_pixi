@@ -6,14 +6,26 @@ export default class Lines {
         this.line.lineStyle(1, 0xffffff, 1);
         this.app.stage.addChild(this.line);
 
+        this.gradient_lines = [];
+
         this.maxLinesPerParticle = 5;
 
         this.app.ticker.add(() => {this.update();});
+
+        for (let i = 0; i < 10; i++) {
+            const line = new PIXI.Sprite();
+            const gradient_rect = this.particles.create_color_gradient(125, 125, true);
+            line.addChild(gradient_rect);
+            this.app.stage.addChild(line);
+            this.gradient_lines.push(line);
+        }
     }
 
     update () {
         this.line.clear();
-        this.line.lineStyle(0.2, 0xffffff, 1);
+        this.line.lineStyle(1, 0xffffff, 1);
+
+       this.gradient_lines[0].x = 100;
 
         // for each particle check all other particles and see if we need to draw a line between them
         for (let i = 0; i < this.particles.particles.length; i++) {
@@ -28,6 +40,7 @@ export default class Lines {
                     let distance = Math.hypot(otherParticle.sprite.x - particle.sprite.x, otherParticle.sprite.y - particle.sprite.y);
                     if (distance < 200) {
                         linesDrawnForParticle++;
+                        
                         this.line.moveTo(particle.sprite.x + (particle.sprite.width / 2), particle.sprite.y + (particle.sprite.height / 2));
                         this.line.lineTo(otherParticle.sprite.x + (particle.sprite.width / 2), otherParticle.sprite.y + (particle.sprite.height / 2));
                     }

@@ -1,5 +1,5 @@
 {
-  "name": "pirate_roguelike_pixi",
+  "name": "particles_pixi",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
@@ -9,6 +9,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "gsap": "^3.0.5",
     "pixi.js": "^4.8.5",
     "webpack": "^4.29.3",
     "webpack-cli": "^3.2.3",
