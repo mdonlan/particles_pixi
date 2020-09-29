@@ -3,8 +3,8 @@ import * as PIXI from 'pixi.js'
 const app = new PIXI.Application({ 
     width: window.innerWidth, 
     height: window.innerHeight,                       
-    antialias: true, 
-    transparent: false, 
+    antialias: false, // perf
+    transparent: false, // perf
     resolution: 1
 });
 
@@ -23,10 +23,10 @@ if(app.renderer instanceof PIXI.CanvasRenderer) {
 }
 
 const particles = [];
+const num_particles = 150;
 
 PIXI.loader
 .load(setup);
-
 
 function create_particle(id, texture) {
     return {
@@ -48,7 +48,7 @@ function create_particles() {
     circle.endFill();
     const texture = circle.generateCanvasTexture();
 
-    for (let i = 0; i < 200; i++) {
+    for (let i = 0; i < num_particles; i++) {
         particles.push(create_particle(i, texture));
         particles[i].sprite.position = particles[i].position;
         app.stage.addChild(particles[i].sprite)
@@ -83,18 +83,13 @@ function draw_lines() {
 
     for (let i = 0; i < particles.length; i++) {
         for (let j = 0; j < particles.length; j++) {
-            if (particles[i].id != particles.id) {
+            if (particles[i].id != particles[j].id) {
                 const dist = get_distance(particles[i].position, particles[j].position);
                 if (dist < 100) {
                     const dist_percent_max = (100 - dist) / 100;
-                    // const int_percent_max = Math.floor((dist_percent_max * 100));
-                    // console.log(int_percent_max)
-                    // graphics.fillAlpha = int_percent_max;
                     graphics.moveTo(particles[i].position.x, particles[i].position.y);
                     graphics.lineTo(particles[j].position.x, particles[j].position.y);
-                    // console.log(graphics.graphicsData.length)
                     graphics.graphicsData[graphics.graphicsData.length - 1].lineAlpha = dist_percent_max;
-                    
                 }
             }
         }
@@ -102,9 +97,6 @@ function draw_lines() {
 
     // .closePath()
     graphics.endFill();
-    // for (let i = 0; i < graphics.graphicsData.length; i++) {
-    //     graphics.graphicsData[i].lineAlpha = 0.2;
-    // }
 }
 
 function update() {
@@ -114,9 +106,6 @@ function update() {
 
 function setup() {
     console.log(app);
-    // runs after loading all assets
     create_particles();
     app.ticker.add(update)
-    // const particles = new Particles(app);
-    // const lines = new Lines(app, this.particles);
 }
